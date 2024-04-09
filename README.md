@@ -6,20 +6,18 @@
 
 由此創建帳號或登入 https://developers.line.biz 
 
-### create 一個新的 Provider，並創建一個新的channel
+### 新增一個新的 Provider，創建一個channel
 
-填入 Provider 的名稱，並按下create
+建立一個 Provider 填入名稱，進去後建立 Messaging API channel(機器人的分類可以自己選)
 
-選擇 Messaging API，並設定 channel 的名稱(機器人的分類可以自己選)
+建立完成請記下以下資訊:
 
-### 設定機器人
-
-進入 basic settings，記下 Channel secret
+進入 basic settings
+- Channel secret
 
 進入 Messaging API
-- 將 webhook 打開
-- 產生 Channel access token，並記下等等用
-- 記下 Bot basic ID
+- 產生 Channel access token 並記下
+- Bot basic ID
   
 ### 開啟回應聊天功能
 
@@ -120,4 +118,30 @@ if __name__ == "__main__":
     app.run()
 ```
 
+## 建立 render 專案
 
+點擊右上角 new+ -> Web Service -> Build and deploy from a Git repository
+
+1. Region 選擇 Singapore
+2. Start Command 輸入 gunicorn app:app
+3. 將前面拿到的 line access token 和 secret 填入 Environment Variables： a. LINE_SECRET b. LINE_ACCESS_TOKEN
+
+按下 Create Web Service 完成建置
+
+## 將完成建置的 render 網址填入 line webhook
+
+回到 line 的 Messaging API 頁面，將新建立的 https://xxxxxxxxxx.onrender.com/callback 填入 Webhook URL ，並且把下方的 Use webhook 設定為啟用
+
+## 讓 render 的服務不會進入休眠
+
+找一台 linux 機器， 進去後執行
+
+```bash
+crontab -e
+```
+
+輸入以下排程，每分鐘去戳 render 的專案，讓它不要睡著
+
+```
+* * * * * curl https://xxxxxxxxxx.onrender.com/callback
+```
