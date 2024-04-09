@@ -1,6 +1,5 @@
 import os
 import urllib.request
-import ssl
 import re
 from flask import Flask, request, abort
 
