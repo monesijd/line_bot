@@ -56,7 +56,7 @@ def handle_message(event):
             bot = urllib.request.urlopen("https://khweb.geohealth.tw/")
             web_content = bot.read().decode('utf8')
             return_content = []
-            for each_find in re.findall(r"<h5.+?>(\w+?)<span.+?>(\w+?)</span>", web_content):
+            for each_find in re.findall(r'<h5 .+?>　(.+?) <span.+?> (.+?) </span>', web_content):
                 return_content.append(each_find[0]+each_find[1])
 
             line_bot_api.reply_message_with_http_info(
